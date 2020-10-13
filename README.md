@@ -1,7 +1,7 @@
 ingress-compose-up
 =========
 
-A brief description of the role goes here.
+This role turns up ingress service via compose 
 
 Requirements
 ------------
