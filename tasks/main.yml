@@ -1,0 +1,17 @@
+- name: Log into DockerHub
+  community.general.docker_login:
+    url: "{{ docker_registry.url }}"
+    username: "{{ docker_registry.user }}"
+    password: "{{ docker_registry.password }}" 
+
+- name: Deploy ingress from a compose file
+  community.general.docker_compose:
+    project_src: "{{ dest_path }}"
+    files: "{{role_name}}.yaml"
+    recreate: always
+
+
+# - name: Deploy ingress from a compose file
+#   shell: "docker-compose -f {{role_name}}.yaml up -d --force-recreate"
+#   args:
+#     chdir: "{{ dest_path }}"
