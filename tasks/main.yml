@@ -1,3 +1,11 @@
+- name: Copy compose file to target host
+  copy:
+    src: "{{ role_path }}/files/{{ role_name }}.yaml"
+    dest: "{{ dest_path }}"
+    owner: deploy
+    group: deploy
+    mode: 0644
+
 - name: Log into DockerHub
   community.general.docker_login:
     url: "{{ docker_registry.url }}"
@@ -7,7 +15,7 @@
 - name: Deploy ingress from a compose file
   community.general.docker_compose:
     project_src: "{{ dest_path }}"
-    files: "{{role_name}}.yaml"
+    files: "{{ role_name }}.yaml"
     recreate: always
 
 

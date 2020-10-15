@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+
+  ingress:
+    container_name: ingress-docker-proxy
+    image: jwilder/nginx-proxy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+#      - ./nginx:/etc/nginx/vhost.d:rw
+#      - certs:/etc/nginx/certs:rw
+#      - html:/usr/share/nginx/html:rw
+    networks:
+      - proxy
+
+#  letsencrypt:
+#    image: jrcs/letsencrypt-nginx-proxy-companion:v1.9.1
+#    restart: always
+#    volumes:
+#      - certs:/etc/nginx/certs:rw
+#      - ./nginx:/etc/nginx/vhost.d:rw
+#      - html:/usr/share/nginx/html:rw
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    networks:
+#      - ingress
+
+networks:
+  proxy:
+    driver: bridge
+    name: proxy
+
+#volumes:
+#  certs:
+#  vhost:
+#  html:
