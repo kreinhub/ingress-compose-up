@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include ingress-compose-up"
+      include_role:
+        name: "ingress-compose-up"
