@@ -1,25 +1,55 @@
-- name: Copy compose file to target host
-  copy:
-    src: "{{ role_path }}/files/{{ role_name }}.yaml"
-    dest: "{{ dest_path }}"
-    owner: deploy
-    group: deploy
-    mode: 0644
+---
+- name: Ingress | Setup and run ingress
+  become: yes
+  become_method: sudo
+  block:
+    - name: Create target directory
+      file: 
+        path: "{{ dest_path }}"
+        state: directory 
+        mode: '0755'
 
-- name: Log into DockerHub
-  community.general.docker_login:
-    url: "{{ docker_registry.url }}"
-    username: "{{ docker_registry.user }}"
-    password: "{{ docker_registry.password }}" 
+    - name: Copy compose file to target host
+      copy:
+        src: "{{ role_path }}/files/{{ role_name }}.yaml"
+        dest: "{{ dest_path }}"
+        owner: deploy
+        group: deploy
+        mode: 0644
 
-- name: Deploy ingress from a compose file
-  community.general.docker_compose:
-    project_src: "{{ dest_path }}"
-    files: "{{ role_name }}.yaml"
-    recreate: always
+    # - name: Debug | Print creds
+    #   debug:
+    #     msg: 
+    #       - "{{ docker_registry.url }}"
+    #       - "{{ docker_registry.user }}"
+    #       - "{{ docker_registry.password }}"
+
+    - name: Log into DockerHub
+      docker_login:
+        registry: "{{ docker_registry.url }}"
+        username: "{{ docker_registry.user }}"
+        password: "{{ docker_registry.password }}" 
+
+    - name: Stop ingress container if they run
+      community.general.docker_compose:
+        project_src: "{{ dest_path }}"
+        files: "{{ role_name }}.yaml"
+        project_name: "{{ project_name }}"
+        remove_orphans: yes
+        stopped: yes
+      tags:
+        - molecule-idempotence-notest
+
+    - name: Deploy ingress from a compose file
+      community.general.docker_compose:
+        project_src: "{{ dest_path }}"
+        files: "{{ role_name }}.yaml"
+        recreate: always
+      tags:
+        - molecule-idempotence-notest
 
 
-# - name: Deploy ingress from a compose file
-#   shell: "docker-compose -f {{role_name}}.yaml up -d --force-recreate"
-#   args:
-#     chdir: "{{ dest_path }}"
+    # - name: Deploy ingress from a compose file
+    #   shell: "docker-compose -f {{role_name}}.yaml up -d --force-recreate"
+    #   args:
+    #     chdir: "{{ dest_path }}"
