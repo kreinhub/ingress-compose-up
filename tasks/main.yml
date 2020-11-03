@@ -9,9 +9,20 @@
         state: directory 
         mode: '0755'
 
+- name: Set fact
+  set_fact:
+    new_role_name: "{{ new_role_name | regex_replace(item.regex, item.replace) }}"
+  loop:
+    - {regex: "^\\w*\\.", replace: ""}
+    - {regex: "_", replace: "-"}
+
+- name: Print fact
+  debug:
+    var: new_role_name
+
     - name: Copy compose file to target host
       copy:
-        src: "{{ role_path }}/files/{{ role_name }}.yaml"
+        src: "{{ role_path }}/files/{{ new_role_name }}.yaml"
         dest: "{{ dest_path }}"
         owner: deploy
         group: deploy
@@ -33,7 +44,7 @@
     - name: Stop ingress container if they run
       community.general.docker_compose:
         project_src: "{{ dest_path }}"
-        files: "{{ role_name }}.yaml"
+        files: "{{ new_role_name }}.yaml"
         project_name: "{{ project_name }}"
         remove_orphans: yes
         stopped: yes
@@ -43,7 +54,7 @@
     - name: Deploy ingress from a compose file
       community.general.docker_compose:
         project_src: "{{ dest_path }}"
-        files: "{{ role_name }}.yaml"
+        files: "{{ new_role_name }}.yaml"
         recreate: always
       tags:
         - molecule-idempotence-notest

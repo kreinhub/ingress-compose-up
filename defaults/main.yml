@@ -8,7 +8,7 @@ project_name: "{{ lookup('env', 'CI_PROJECT_NAME') | default('lms', true) }}-{{ 
 dest_path: "/var/www/"
 image_name: "{{ docker_registry.url  }}/{{ lookup('env','CI_PROJECT_PATH') | default('otus6/projects',true) }}/{{lookup('env','CI_PROJECT_NAME') | default('lms', true) }}-web:{{lookup('env','CI_COMMIT_REF_SLUG') | default('dev', true) }}"
 virtual_host: "{{ lookup('env','CI_COMMIT_REF_SLUG') | default('dev', true) }}.web.{{ lookup('env','DEPLOY_DOMAIN') | default('localhost', true) }}"
-
+new_role_name: "{{ role_name }}"
 
 #---
 #docker_registry:
