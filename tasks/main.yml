@@ -9,16 +9,16 @@
         state: directory 
         mode: '0755'
 
-- name: Set fact
-  set_fact:
-    new_role_name: "{{ new_role_name | regex_replace(item.regex, item.replace) }}"
-  loop:
-    - {regex: "^\\w*\\.", replace: ""}
-    - {regex: "_", replace: "-"}
+    - name: Set fact
+      set_fact:
+        new_role_name: "{{ new_role_name | regex_replace(item.regex, item.replace) }}"
+      loop:
+        - {regex: "^\\w*\\.", replace: ""}
+        - {regex: "_", replace: "-"}
 
-- name: Print fact
-  debug:
-    var: new_role_name
+    - name: Print fact
+      debug:
+        var: new_role_name
 
     - name: Copy compose file to target host
       copy:
