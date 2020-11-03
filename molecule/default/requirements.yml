@@ -1,0 +1,4 @@
+---
+
+roles:
+- src: "kreinhub.docker_compose_install"
