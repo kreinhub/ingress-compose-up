@@ -6,7 +6,7 @@ docker_registry:
   password: "{{ lookup('env', 'CI_JOB_TOKEN') | default(lookup('env','VAGRANT_TOKEN'), true) }}"
 
 project_name: "{{ lookup('env', 'CI_PROJECT_NAME') | default('lms', true) }}-{{ lookup('env', 'CI_COMMIT_REF_SLUG') | default('dev', true) }}"
-dest_path: "/var/www/"
+dest_path: "/var/www"
 tls_src: "{{ lookup('env', 'CI_PROJECT_DIR') }}/.cicd/secrets/vault/{{ lookup('env','CWE') | default('staging', true) }}/tls/secrets/"
 # tls_src: "../../secrets/vault/{{ lookup('env','CWE') | default('staging', true) }}/tls/secrets/"
 # new_role_name: "{{ role_name }}"
