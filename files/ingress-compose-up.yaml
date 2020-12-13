@@ -14,6 +14,9 @@ services:
       - /var/www/tls:/etc/nginx/certs:rw
 #      - ./nginx:/etc/nginx/vhost.d:rw
 #      - html:/usr/share/nginx/html:rw
+  environment:
+    DEFAULT_HOST: inpublic.net #default host
+    CERT_NAME: fullchain1 # Wildcard Certificate name without extension  
     networks:
       - proxy
 
