@@ -3,11 +3,14 @@
   become: yes
   become_method: sudo
   block:
-    - name: Create target directory
+    - name: Create target directories
       file: 
         path: "{{ dest_path }}"
         state: directory 
         mode: '0755'
+      with_items:
+        - "{{ dest_path }}"
+        - "{{ dest_path }}/tls"
 
     # - name: Set fact
     #   set_fact:
@@ -36,9 +39,12 @@
         owner: deploy
         group: deploy
         mode: 0644
-      with_fileglob:
-        - "{{ tls_src }}/*.key"
-        - "{{ tls_src }}/*.crt"
+      with_items:
+        - "{{ tls_src }}/{{ lookup('env','DEPLOY_DOMAIN') }}.key"
+        - "{{ tls_src }}/{{ lookup('env','DEPLOY_DOMAIN') }}.crt"
+      # with_fileglob:
+      #   - "{{ tls_src }}/*.key"
+      #   - "{{ tls_src }}/*.crt"
 
     # - name: Debug | Print creds
     #   debug:
