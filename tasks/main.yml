@@ -5,12 +5,13 @@
   block:
     - name: Create target directories
       file: 
-        path: "{{ dest_path }}"
+        path: "{{ item }}"
         state: directory 
         mode: '0755'
       with_items:
         - "{{ dest_path }}"
         - "{{ dest_path }}/tls"
+      register: directories
 
     # - name: Set fact
     #   set_fact:
@@ -19,9 +20,9 @@
     #     - {regex: "^\\w*\\.", replace: ""}
     #     - {regex: "_", replace: "-"}
 
-    # - name: Print fact
-    #   debug:
-    #     var: new_role_name
+    - name: Print directories
+      debug:
+        var: directories
 
     - name: Copy compose file to target host
       copy:
