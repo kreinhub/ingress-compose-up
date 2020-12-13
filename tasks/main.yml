@@ -29,6 +29,16 @@
         group: deploy
         mode: 0644
 
+    - name: Copy ssl files to target host
+      copy:
+        src: "{{ item }}"
+        dst: "{{ dest_path }}/tls"
+        owner: deploy
+        group: deploy
+        mode: 0644
+      with_fileglob:
+        - "{{ tls_src }}/*.pem"
+
     # - name: Debug | Print creds
     #   debug:
     #     msg: 
