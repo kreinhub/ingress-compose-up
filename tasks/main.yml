@@ -32,7 +32,7 @@
     - name: Copy ssl files to target host
       copy:
         src: "{{ item }}"
-        dst: "{{ dest_path }}/tls"
+        dest: "{{ dest_path }}/tls"
         owner: deploy
         group: deploy
         mode: 0644
