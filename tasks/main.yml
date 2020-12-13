@@ -37,7 +37,8 @@
         group: deploy
         mode: 0644
       with_fileglob:
-        - "{{ tls_src }}/*.pem"
+        - "{{ tls_src }}/*.key"
+        - "{{ tls_src }}/*.crt"
 
     # - name: Debug | Print creds
     #   debug:
